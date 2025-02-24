@@ -1,27 +1,13 @@
 // ✅ Import necessary modules
 const express = require("express");
-const mysql = require("mysql2");
+
 const cors = require("cors");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ MySQL Database Connection
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root", // Replace with your MySQL password
-  database: "refer_earn"
-});
 
-db.connect((err) => {
-  if (err) {
-    console.error("❌ MySQL Connection Failed:", err);
-  } else {
-    console.log("✅ MySQL Connected!");
-  }
-});
 
 // ✅ API Route: Fetch All Referrals
 app.get("/get-referrals", (req, res) => {
