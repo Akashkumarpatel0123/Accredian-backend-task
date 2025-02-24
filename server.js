@@ -1,18 +1,28 @@
-// ✅ Import necessary modules
 const express = require("express");
-const pool = require("./config/db");
+const pool = require("./config/db"); // PostgreSQL connection
 const cors = require("cors");
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // Important for parsing JSON data
 
-// ✅ Routes
+// ✅ GET all referrals
+app.get("/get-referrals", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM referrals");
+    res.json(result.rows); // PostgreSQL returns data inside `rows`
+  } catch (error) {
+    console.error("Database Error:", error);
+    res.status(500).json({ error: "Database Error" });
+  }
+});
+
+// ✅ POST - Add a new referral
 app.post("/add-referral", async (req, res) => {
   const { referrer, referee } = req.body;
 
   if (!referrer || !referee) {
-    return res.status(400).json({ error: "Missing fields" });
+    return res.status(400).json({ error: "Missing referrer or referee" });
   }
 
   try {
@@ -26,7 +36,6 @@ app.post("/add-referral", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
-
 
 // ✅ Start the Server
 const PORT = process.env.PORT || 5000;
