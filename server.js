@@ -3,7 +3,6 @@ const pool = require("./config/db"); // PostgreSQL connection
 const cors = require("cors");
 
 const app = express();
-const cors = require("cors");
 app.use(cors({ origin: "*" })); // ✅ Allow all origins
 
 app.use(express.json()); // Important for parsing JSON data
