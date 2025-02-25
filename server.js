@@ -1,17 +1,23 @@
 const express = require("express");
-const pool = require("./config/db"); // PostgreSQL connection
+const pool = require("./config/db"); // ✅ PostgreSQL connection
 const cors = require("cors");
 
 const app = express();
-app.use(cors({ origin: "*" })); // ✅ Allow all origins
 
-app.use(express.json()); // Important for parsing JSON data
+// ✅ Allow CORS for Frontend on Vercel
+app.use(cors({ origin: "https://accredian-frontend-task-ecru-kappa.vercel.app" }));
+app.use(express.json()); // ✅ Important for parsing JSON data
+
+// ✅ Test Route
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
 
 // ✅ GET all referrals
 app.get("/get-referrals", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM referrals");
-    res.json(result.rows); // PostgreSQL returns data inside `rows`
+    res.json(result.rows); // ✅ PostgreSQL returns data inside `rows`
   } catch (error) {
     console.error("Database Error:", error);
     res.status(500).json({ error: "Database Error" });
@@ -39,7 +45,7 @@ app.post("/add-referral", async (req, res) => {
 });
 
 // ✅ Start the Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
